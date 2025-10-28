@@ -1,0 +1,32 @@
+name: Testing pas buat PR
+
+on:
+  pull_request:
+    branches: ["**"]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Disable Husky (CI)
+        run: npm pkg set scripts.prepare="husky install" || true
+
+      - name: Run ESLint
+        run: npm run lint
+
+      - name: Run unit tests (CI mode)
+        run: npm run test:ci
+        env:
+          CI: true
