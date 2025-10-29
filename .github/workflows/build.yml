@@ -1,4 +1,4 @@
-name: BUILD & DEPLOY TO VERCEL (MAIN BRANCH)
+name: BUILD & MERGE (MAIN BRANCH)
 
 on:
   push:
