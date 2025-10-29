@@ -61,15 +61,15 @@ async function verifyHMAC(message: string, secret: string, sigB64url: string) {
 export async function middleware(req: NextRequest) {
   const resultNext = NextResponse.next();
 
-  // resultNext.headers.set("X-Frame-Options", "DENY");
-  // resultNext.headers.set("X-Content-Type-Options", "nosniff");
-  // resultNext.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
-  // resultNext.headers.set("Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload");
+  resultNext.headers.set("X-Frame-Options", "DENY");
+  resultNext.headers.set("X-Content-Type-Options", "nosniff");
+  resultNext.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+  resultNext.headers.set("Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload");
 
-  // resultNext.headers.set("Access-Control-Allow-Origin", "*");
-  // resultNext.headers.set("Access-Control-Allow-Credentials", "true");
-  // resultNext.headers.set("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
-  // resultNext.headers.set("Access-Control-Allow-Headers", "Content-Type, X-Csrf-Token");
+  resultNext.headers.set("Access-Control-Allow-Origin", "*");
+  resultNext.headers.set("Access-Control-Allow-Credentials", "true");
+  resultNext.headers.set("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+  resultNext.headers.set("Access-Control-Allow-Headers", "Content-Type, X-Csrf-Token");
 
   const apiUrls = [
     process.env.NEXT_PUBLIC_API_USER,
@@ -85,7 +85,7 @@ export async function middleware(req: NextRequest) {
     "frame-ancestors 'none'",
   ].join("; ");
 
-  // resultNext.headers.set("Content-Security-Policy", csp);
+  resultNext.headers.set("Content-Security-Policy", csp);
 
   const token = req.cookies.get("token")?.value;
   if (!token && req.nextUrl.pathname.startsWith("/main")) {

@@ -39,12 +39,12 @@ export async function POST(req: Request) {
     return res;
   } catch (err) {
     console.error("Login POST error:", err);
+    const msg = String(err);
 
     if (process.env.NODE_ENV !== "production") {
-      const msg = String(err);
       return new NextResponse(`Internal server error: ${msg}`, { status: 500 });
     } else {
-      return new NextResponse("Internal server error", { status: 500 });
+      return new NextResponse(`Internal server error: ${msg}`, { status: 500 });
     }
   }
 }
