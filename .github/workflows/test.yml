@@ -1,8 +1,12 @@
 name: Testing pas buat PR
 
 on:
+  push:
+    branches:
+      - "feature/**"
   pull_request:
-    branches: ["**"]
+    branches:
+      - main
 
 jobs:
   test:
