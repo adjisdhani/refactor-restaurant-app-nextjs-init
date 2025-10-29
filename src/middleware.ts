@@ -85,7 +85,7 @@ export async function middleware(req: NextRequest) {
     "frame-ancestors 'none'",
   ].join("; ");
 
-  resultNext.headers.set("Content-Security-Policy", csp);
+  // resultNext.headers.set("Content-Security-Policy", csp);
 
   const token = req.cookies.get("token")?.value;
   if (!token && req.nextUrl.pathname.startsWith("/main")) {
