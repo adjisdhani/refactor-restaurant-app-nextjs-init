@@ -61,15 +61,15 @@ async function verifyHMAC(message: string, secret: string, sigB64url: string) {
 export async function middleware(req: NextRequest) {
   const resultNext = NextResponse.next();
 
-  resultNext.headers.set("X-Frame-Options", "DENY");
-  resultNext.headers.set("X-Content-Type-Options", "nosniff");
-  resultNext.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
-  resultNext.headers.set("Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload");
+  // resultNext.headers.set("X-Frame-Options", "DENY");
+  // resultNext.headers.set("X-Content-Type-Options", "nosniff");
+  // resultNext.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+  // resultNext.headers.set("Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload");
 
-  resultNext.headers.set("Access-Control-Allow-Origin", "*");
-  resultNext.headers.set("Access-Control-Allow-Credentials", "true");
-  resultNext.headers.set("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
-  resultNext.headers.set("Access-Control-Allow-Headers", "Content-Type, X-Csrf-Token");
+  // resultNext.headers.set("Access-Control-Allow-Origin", "*");
+  // resultNext.headers.set("Access-Control-Allow-Credentials", "true");
+  // resultNext.headers.set("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+  // resultNext.headers.set("Access-Control-Allow-Headers", "Content-Type, X-Csrf-Token");
 
   const apiUrls = [
     process.env.NEXT_PUBLIC_API_USER,
@@ -121,24 +121,24 @@ export async function middleware(req: NextRequest) {
     const cookie = req.cookies.get(CSRF_COOKIE_NAME)?.value ?? "";
 
     if (!cookie) {
-      // return new NextResponse("Forbidden - missing CSRF cookie", { status: 403 });
-      return NextResponse.redirect(new URL("/login", req.url));
+      return new NextResponse("Forbidden - missing CSRF cookie", { status: 403 });
+      // return NextResponse.redirect(new URL("/login", req.url));
     }
     const [cookieToken, cookieSig] = cookie.split(".");
     if (!cookieToken || !cookieSig) {
-      // return new NextResponse("Forbidden - invalid CSRF cookie", { status: 403 });
-      return NextResponse.redirect(new URL("/login", req.url));
+      return new NextResponse("Forbidden - invalid CSRF cookie", { status: 403 });
+      // return NextResponse.redirect(new URL("/login", req.url));
     }
 
     if (!headerToken || headerToken !== cookieToken) {
-      // return new NextResponse("Forbidden - CSRF token mismatch", { status: 403 });
-      return NextResponse.redirect(new URL("/login", req.url));
+      return new NextResponse("Forbidden - CSRF token mismatch", { status: 403 });
+      // return NextResponse.redirect(new URL("/login", req.url));
     }
 
     const ok = await verifyHMAC(cookieToken, SECRET, cookieSig);
     if (!ok) {
-      // return new NextResponse("Forbidden - CSRF token signature invalid", { status: 403 });
-      return NextResponse.redirect(new URL("/login", req.url));
+      return new NextResponse("Forbidden - CSRF token signature invalid", { status: 403 });
+      // return NextResponse.redirect(new URL("/login", req.url));
     }
 
     return resultNext;
